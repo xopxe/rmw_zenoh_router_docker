@@ -1,0 +1,20 @@
+[Unit]
+Description=Zenoh-RMW Router
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=exec
+Restart=no
+ExecStartPre=-/usr/bin/docker exec %n stop
+ExecStartPre=-/usr/bin/docker rm %n
+ExecStart=docker run --init --restart unless-stopped --name %n \
+  --user ubuntu --network=host --ipc=host \
+  -v /home/odroid/rmw_zenoh_router_docker:/rmw_zenoh_router \
+  rmw_zenoh_router:jazzy
+ExecStop=/usr/bin/docker stop %n
+ExecStop=/usr/bin/docker rm %n
+TimeoutStopSec=10
+
+[Install]
+WantedBy=multi-user.target
