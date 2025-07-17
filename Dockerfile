@@ -20,30 +20,17 @@ RUN apt-get update && \
 # Switch from root to user
 USER $USERNAME
 
-# Add user to video group to allow access to webcam
-RUN sudo usermod --append --groups video $USERNAME
-
-# Update all packages
-RUN sudo apt update && sudo apt upgrade -y
-
-# Install Git
-RUN sudo apt install -y \
+# Upgrade and Install rmw-zenoh-cpp
+RUN sudo apt update \
+    && sudo apt upgrade -y \
+    && sudo apt install -y \
     ros-${ROS_DISTRO}-rmw-zenoh-cpp \
     && sudo rm -rf /var/lib/apt/lists/*
 
 # Source the ROS setup file
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
 
-################################
-## ADD ANY CUSTOM SETUP BELOW ##
-################################
-
 WORKDIR /rmw_zenoh_router
-
-## Set ROS2 environment variables
-#ENV GZ_VERSION=harmonic
-#ENV ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST
-#ENV ROS_DOMAIN_ID=0
 
 ENV ZENOH_ROUTER_CONFIG_URI=/rmw_zenoh_router/zenoh_router_config.json5
 ENV ZENOH_SESSION_CONFIG_URI=/rmw_zenoh_router/zenoh_session_config.json5
@@ -56,13 +43,7 @@ EXPOSE 7447/tcp
 
 # Copy the zenoh_start.sh into the image and adjust permissions
 COPY zenoh_start.sh /zenoh_start.sh
-
 RUN sudo chmod +x /zenoh_start.sh
 
-#STOPSIGNAL SIGINT
-
-#ENTRYPOINT [ "/bin/bash", "/zenoh_start.sh" ]
 ENTRYPOINT [ "/zenoh_start.sh" ]
-#ENTRYPOINT [ "python3", "ros2", "run", "rmw_zenoh_cpp", "rmw_zenohd" ]
-#ENTRYPOINT [ "/usr/bin/python3", "/opt/ros/jazzy/bin/ros2", "run", "rmw_zenoh_cpp", "rmw_zenohd" ]
 
