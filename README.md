@@ -11,7 +11,7 @@ docker image build --rm -t rmw_zenoh_router:jazzy $PWD
 ## Start manually
 
 ```sh
-docker run --init --rm --privileged --user ubuntu \
+docker run --init --rm --user ubuntu \
   --network=host --ipc=host \
   -v $PWD:/rmw_zenoh_router \
   rmw_zenoh_router:jazzy
@@ -25,6 +25,11 @@ Edit `rmw_zenoh_router.service` file, set path to this directory in the ExecStar
 sudo cp -v rmw_zenoh_router.service /etc/systemd/system
 sudo systemctl enable rmw_zenoh_router.service
 sudo systemctl start rmw_zenoh_router.service
+```
+
+Verify it is working:
+
+```sh
 sudo systemctl status rmw_zenoh_router.service
 sudo journalctl -f -u rmw_zenoh_router.service
 ```
