@@ -27,9 +27,6 @@ RUN sudo apt update \
     ros-${ROS_DISTRO}-rmw-zenoh-cpp \
     && sudo rm -rf /var/lib/apt/lists/*
 
-# Source the ROS setup file
-RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
-
 WORKDIR /rmw_zenoh_router
 
 ENV ZENOH_ROUTER_CONFIG_URI=/rmw_zenoh_router/zenoh_router_config.json5
