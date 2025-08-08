@@ -6,7 +6,7 @@ Requires=docker.service
 [Service]
 Type=exec
 Restart=no
-ExecStartPre=-/usr/bin/docker exec %n stop
+ExecStartPre=-/usr/bin/docker stop %n
 ExecStartPre=-/usr/bin/docker rm %n
 ExecStart=docker run --init --restart unless-stopped --name %n \
   --user ubuntu --network=host --ipc=host \
