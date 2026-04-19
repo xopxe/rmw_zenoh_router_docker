@@ -6,6 +6,7 @@ Requires=docker.service
 [Service]
 Type=exec
 Restart=no
+ExecStartPre=-/usr/bin/docker rm %n
 ExecStart=docker run --init \
   --user ubuntu --network=host --ipc=host \
   -v /home/odroid/rmw_zenoh_router_docker:/rmw_zenoh_router \
